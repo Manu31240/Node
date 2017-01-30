@@ -1,14 +1,10 @@
-let personnes = require('./contacts.json');
-let _ = require('lodash');
-var colors = require('colors');
-const program = require('commander');
+//version ES6
 
-program
-  .version('0.0.1')
-  .option('-l, --contacts available', 'mycontact.print()')
-  .option('-c, --input', '')
-  .parse(process.argv);
-  //console.log(program.input);
+
+let personnes = require('./contacts.json');
+let _ = require('./lib/underscore');
+var colors = require('colors');
+var program = require('commander');
 
 function Contact (id, firstName, lastName, address, phone) {
   this.id = id;
@@ -20,12 +16,7 @@ function Contact (id, firstName, lastName, address, phone) {
 
 Contact.prototype.toString = function () {
   //Console.log(this.firstName.toUpperCase(), this.lastName)
-  if(program.input){
-    return this.lastName.toUpperCase().blue + ' ' + this.firstName.toUpperCase().red;
-  }else{
-    return this.lastName.toUpperCase()+ ' ' + this.firstName.toUpperCase();
-
-  }
+  return this.lastName.toUpperCase().blue + ' ' + this.firstName.toUpperCase().red;
 }
 
 function MemoryContacts(){
