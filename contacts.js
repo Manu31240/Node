@@ -5,10 +5,14 @@ const program = require('commander');
 
 program
   .version('0.0.1')
-  .option('-l, --contacts available', 'mycontact.print()')
-  .option('-c, --input', '')
-  .parse(process.argv);
-  //console.log(program.input);
+  .option('-c, --colors', 'Add colors')
+  .command("list")
+  .action(function(){
+    let myContacts = new Contacts();
+  })
+
+  program.parse(process.argv);
+  console.log(program.colors);
 
 function Contact (id, firstName, lastName, address, phone) {
   this.id = id;
@@ -20,7 +24,7 @@ function Contact (id, firstName, lastName, address, phone) {
 
 Contact.prototype.toString = function () {
   //Console.log(this.firstName.toUpperCase(), this.lastName)
-  if(program.input){
+  if(!!program.colors){
     return this.lastName.toUpperCase().blue + ' ' + this.firstName.toUpperCase().red;
   }else{
     return this.lastName.toUpperCase()+ ' ' + this.firstName.toUpperCase();
