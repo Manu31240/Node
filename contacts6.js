@@ -1,58 +1,147 @@
+#!/usr/bin/env node
 //version ES6
+//const data = require('./contacts.json');
 
+const fs = require('fs');
+const chalk = require('chalk');
+const yargs = require('yargs');
+const _ = require('lodash');
+const path = './contacts.json';
 
-let personnes = require('./contacts.json');
-let _ = require('./lib/underscore');
-var colors = require('colors');
-var program = require('commander');
+/** Classe FileContacts */
+class FileContacts {
+  read(callback) {
+    fs.readFile(path,function(err, data){
+      if(err){
+        console.error('pb');
+      } else {
+        const jsonData = JSON.parse(data);
+        //console.log('jsonData', jsonData);
+        const contacts = JSON.parse(data).map(contact => new Contact(contact));
+        if(!!callback){
+          callback(contacts);
+        }
+      }
+      })
+  }
+  get(callback){
+    this.read(callback);
+  }
+  write (contacts, callback){
+    const contactsString = JSON.stringify(contacts);
+    fs.writeFile(path, contactsString, callback);
 
-function Contact (id, firstName, lastName, address, phone) {
-  this.id = id;
-  this.firstName = firstName;
-  this.lastName = lastName;
-  this.address = address;
-  this.phone = phone;
+  }
+  add (firstName, lastName, callback){
+    this.read(function(contacts){
+      const maxId = _.chain(contacts)
+      .sortBy(function(c){return c.id;})
+      .last()
+      .value()
+      .id;
+      const newContact = new Contact({
+        id : maxId + 1,
+        firstName : firstName,
+        lastName : lastName
+      });
+      console.log(newContact);
+      contacts.push(newContact);
+      //ecrire les contacts maj dans le fichier
+      this.write(contacts, callback);
+    }.bind(this));
+  }
+  delete (callback){
+
+  }
+
 }
 
-Contact.prototype.toString = function () {
-  //Console.log(this.firstName.toUpperCase(), this.lastName)
-  return this.lastName.toUpperCase().blue + ' ' + this.firstName.toUpperCase().red;
-}
 
-function MemoryContacts(){
-  this.contacts = [];
+/** Classe Contact */
+class Contact {
+  constructor(contact) {
+    Object.assign(this, contact);
+  }
 
-  _.each(personnes, function(personne){
-    this.contacts.push(new Contact(personne.id, personne.firstName, personne.lastName,personne.address, personne.phone));
-  }.bind(this));
-  /*personnes.forEach(function(personne){
-  this.contacts.push(new Contact(personne.id, personne.firstName, personne.lastName,personne.address, personne.phone));
-}.bind(this));*/
-  /*this.contacts = _.map(personnes, function(personne){
-  return new Contact(personne.id, personne.firstName, personne.lastName,personne.address, personne.phone));
-});*/
-  this.get = function(callback){
-    if (!!callback){
-    callback(this.contacts);
+  toString() {
+    let lastName = this.lastName.toUpperCase();
+    let firstName = this.firstName;
+
+    if(yargs.argv.c) {
+      lastName = chalk.blue(lastName);
+      firstName = chalk.red(firstName);
     }
+
+    return `${lastName} ${firstName}`;
   }
-  //console.log(personnes.length);
 }
 
-function Contacts() {
-  //Fonction qui sera utilisée comme callback
-  function afficherContacts(contacts){
-    //Affiche les contacts...
-    console.log(contacts.join(","));
-
+/** Classe MemoryContacts */
+/*class MemoryContacts {
+  constructor() {
+    this.contacts = data.map(contact => new Contact(contact));
   }
-  this.print = function(){
-    this.get(afficherContacts);
-  }
-};
-// On fait "heriter" Contacts de MemoryContacts via le prototype
-Contacts.prototype = new MemoryContacts();
 
-//let c = new Contact();
-let mycontact = new Contacts();
-mycontact.print();
+  get(callback) {
+    callback(this.contacts);
+  }
+}
+$/
+/** Classe Contacts, hérite de MemoryContacts */
+class Contacts extends FileContacts {
+  print() {
+    this.get(contacts => console.log(contacts.join(', ')));
+  }
+}
+
+/* Instanciation de 'Contacts' */
+const myContacts = new Contacts();
+
+/* Parsing yargs */
+
+yargs
+  .version('0.0.0')
+  // Ajout d'une option 'c' -> colors
+  .option('c', {
+    alias: 'colors',
+    desc: 'Use colors in console'
+  })
+  .help()
+  // L'option 'c' est une option globale (elle fonctionne pour toutes les commandes)
+  .global('c')
+
+yargs
+  // Définition d'une commande list qui appelle 'myContacts.print()'
+  .command({
+    command: 'list',
+    aliases: 'ls',
+    desc: 'List all contacts',
+    handler: () => myContacts.print(),
+  })
+  // Définition d'une commande list qui ajoute un contact
+  .command({
+    command: 'add',
+    aliases: 'a',
+    desc: 'add contacts',
+    builder: (yrgs) => {
+      yrgs
+      .option('firstName', {
+        alias : 'f',
+        desc: 'first Name',
+        demande : true,
+        type: 'string'
+      })
+      .option('lastName', {
+        alias : 'l',
+        desc: 'last Name',
+        demande : true,
+        type: 'string'
+      })
+    },
+    handler : (argv) => {
+      myContacts.add(argv.firstName, argv.lastName);
+    },
+})
+
+// Yargs est exécuté
+yargs.parse(process.argv);
