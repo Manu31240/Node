@@ -7,6 +7,7 @@ const chalk = require('chalk');
 const yargs = require('yargs');
 const _ = require('lodash');
 const path = './contacts.json';
+const Contact = require('./contact.js');
 
 /** Classe FileContacts */
 class FileContacts {
@@ -57,31 +58,13 @@ class FileContacts {
 }
 
 
-/** Classe Contact */
-class Contact {
-  constructor(contact) {
-    Object.assign(this, contact);
-  }
 
-  toString() {
-    let lastName = this.lastName.toUpperCase();
-    let firstName = this.firstName;
-
-    if(yargs.argv.c) {
-      lastName = chalk.blue(lastName);
-      firstName = chalk.red(firstName);
-    }
-
-    return `${lastName} ${firstName}`;
-  }
-}
 
 /** Classe MemoryContacts */
 /*class MemoryContacts {
   constructor() {
     this.contacts = data.map(contact => new Contact(contact));
   }
-
   get(callback) {
     callback(this.contacts);
   }
