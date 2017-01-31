@@ -1,2 +1,8 @@
-# Node
-Formation Zenika Paris du 30/01/17 au 01/02/17
+# Modules contacts #
+
+Info sur mon projet
+
+- liste les contacts
+- ajoute un nouveau contact...
+
+    node index add --firstName prenom --lastName nom

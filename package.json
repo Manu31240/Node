@@ -1,32 +1,37 @@
 {
-  "name": "contact",
+  "name": "contacts",
   "version": "1.0.0",
-  "description": "Formation Zenika Paris du 30/01/17 au 01/02/17",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "liste de contacts",
   "main": "contacts.js",
   "dependencies": {
     "body-parser": "^1.16.0",
     "chalk": "^1.1.3",
+    "co": "^4.6.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
+    "denodeify": "^1.2.1",
     "express": "^4.14.1",
     "lodash": "^4.17.4",
-    "nodemon": "^1.11.0",
     "serve-static": "^1.11.2",
-    "ungit": "^1.1.3",
-    "yargs": "^6.6.0"
+    "underscore": "^1.8.3",
+    "yargs": "6.4.0"
   },
   "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Manu31240/Node.git"
+    "url": "git+https://github.com/Zenika/formation-nodejs.git"
   },
-  "author": "Manu",
+  "keywords": [
+    "mongo",
+    "node"
+  ],
+  "author": "Antoine Ceol",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Manu31240/Node/issues"
+    "url": "https://github.com/Zenika/formation-nodejs/issues"
   },
-  "homepage": "https://github.com/Manu31240/Node#readme"
+  "homepage": "https://github.com/Zenika/formation-nodejs#readme"
 }
