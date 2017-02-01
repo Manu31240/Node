@@ -2,11 +2,14 @@ const fs = require('fs');
 const _ = require('lodash');
 const diff= require('./lib/diff');
 const Contact = require('./contact');
-
+const write = require('./write-implems');
 const path = './contacts.json';
 
 /** Classe FileContacts */
 class FileContacts {
+  constructor(){
+  this.write = write.writePromises;
+}
   watch(){
     this.read(function(contactsReference){
       //Appel le watch
@@ -25,10 +28,10 @@ class FileContacts {
     }.bind(this));
   }
 
-  write(contacts, callback){
+  /*write(contacts, callback){
     const contactsString = JSON.stringify(contacts);
     fs.writeFile(path, contactsString, callback);
-  }
+  }*/
 
   add(firstName, lastName, address, phone, callback){
     this.read(function(contacts){

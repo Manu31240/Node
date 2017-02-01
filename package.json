@@ -13,10 +13,17 @@
     "express": "^4.14.1",
     "lodash": "^4.17.4",
     "serve-static": "^1.11.2",
+    "socket.io": "^1.7.2",
     "underscore": "^1.8.3",
     "yargs": "6.4.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
