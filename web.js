@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const serveStatic = require("serve-static");
+const socketio = require("socket.io");
 
 
-function router(app, myContacts){
+function router(app, io, myContacts){
 
   //GET localhost:8080/rest/contacts
   //renvoie tout les contacts
@@ -50,7 +51,12 @@ function router(app, myContacts){
     myContacts.delete(id, () => myContacts.add(firstName, lastName, address, phone, () => res.sendStatus(200)));
   })
 }
-
+io.on('connection', function(socket){
+  console.log("un client s'est connecté", socket.id);
+});
+myContacts.watchContacts(function(contacts){
+  io.emit("contacts",contacts);
+});
 
 module.exports = function(contacts){
   const app = express();
@@ -60,10 +66,11 @@ module.exports = function(contacts){
   }));
   app.use(bodyParser.json());
 
-  router(app, contacts);
+  let server = app.listen(8080);
+  let io = socketio.listen(server);
 
-  app.listen(8080);
+  router(app,io, contacts);
 
 
 
-}
+ }

@@ -5,13 +5,18 @@ const co = require('co');
 const readFile = denodeify(fs.readFile);
 const writeFile = denodeify(fs.writeFile);
 const unlink = denodeify(fs.unlink);
+
+
 const rename = denodeify(fs.rename);
 const path = "./contacts.json";
 const backupPath = path + "Bkp";
 
+
+
 module.exports.writeCallback = function write(contacts, callback){
   const contactsString = JSON.stringify(contacts);
   fs.writeFile(path, contactsString, callback);
+
 }
 
 

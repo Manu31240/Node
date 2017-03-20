@@ -1,0 +1,20 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "extends": "airbnb",
+        "parser": "esprima",
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "no-extra-semi": "error",
+        
+
+
+    }
+
+
+
+}
